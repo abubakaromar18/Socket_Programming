@@ -63,30 +63,38 @@ int main(int argc, char **argv)
     error("ERROR connecting");
   }
 
+
+  //LOOP ALLOWS MULTIPLE MESSAGES TO BE TRANSMITTED BACK AND FORTH
   while(!close_connection)
   {
     printf("Please enter the message (or type exit to terminate connection): ");
     bzero(buffer, 256);
     fgets(buffer, 255, stdin);
-  
+
+    //WRITES THE USER INPUT TO THE SOCKET DESCRIPTOR
     n = write(sockfd, &buffer, strlen(buffer));
     if(n < 0)
     {
       error("ERROR writing to socket");
     }
 
-    bzero(buffer, 256);
+    bzero(buffer, 256); //CLEAR THE BUFFER
+
+    //READS THE SOCKET DESCRIPTER TO THE BUFFER
     n = read(sockfd, &buffer, 255);
     if(n < 0)
     {
       error("ERROR reading from socket");
     }
 
-    if(strcmp(buffer, "exit") == 0)
+    //COMPARES THE BUFFER TO THE STRING EXIT
+    if(strcmp(buffer, "exit") == 0) // IF BUFFER CONTENT == EXIT
     {
+      //CLOSE CONNECTION AND TERMINATE THE PROGRAM
       close_connection = true;
       printf("Connection Terminated");
     }
+    //ELSE WRITE THE CONTENTS SENT FROM THE SERVER
     else
     {
       printf("%s\n", buffer);

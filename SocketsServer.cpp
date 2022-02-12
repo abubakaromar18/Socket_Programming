@@ -66,17 +66,22 @@ int main(int argc, char **argv)
     error("ERROR on accept");
   }
 
+  //LOOP ALLOWS MULTIPLE MESSAGES TO BE TRANSMITTED BACK AND FORTH
   while(!close_connection)
   {
     bzero(buffer, 256);
+
+    //READS INPUT FROM THE SOCKET FILE DESCRIPTOR INTO THE BUFFER
     n = read(newsockfd, &buffer, 255);
     if(n < 0)
     {
       error("ERROR reading from socket");
     }
 
-    if(strcmp(buffer, "exit\n") == 0)
+    //COMPARES THE BUFFER TO THE STRING EXIT
+    if(strcmp(buffer, "exit\n") == 0) //IF BUFFER == EXIT
     {
+      //CLOSES THE CONNECTION AND TERMINATES THE PROGRAM
       close_connection = true;
       n = write(newsockfd, "exit", 4);
       if(n < 0)
@@ -84,6 +89,7 @@ int main(int argc, char **argv)
         error("ERROR writing to socket");
       }
     }
+    //ECHOS THE CLIENT INPUT BACK TO THE CLIENT
     else
     {
       printf("Here is the message: %s\n", buffer);
