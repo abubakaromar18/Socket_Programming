@@ -69,13 +69,13 @@ int main(int argc, char **argv)
   while(!close_connection)
   {
     bzero(buffer, 256);
-    n = read(newsockfd, buffer, 255);
+    n = read(newsockfd, &buffer, 255);
     if(n < 0)
     {
       error("ERROR reading from socket");
     }
 
-    if(strcmp(buffer, "exit") == 0)
+    if(strcmp(buffer, "exit\n") == 0)
     {
       close_connection = true;
       n = write(newsockfd, "exit", 4);
